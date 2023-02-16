@@ -1,3 +1,7 @@
+# Docker Wait for Deps
+
+A simple container that puts itself on hold until the other services declared in the docker-compose are accessible via TCP
+
 ## Example usage:
 
 Sample `docker-compose.yml`:
