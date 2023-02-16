@@ -1,6 +1,8 @@
 # Docker Wait for Deps
 
-A simple container that puts itself on hold until the other services declared in the docker-compose are accessible via TCP
+A simple container that puts itself on hold until the other services declared in the docker-compose are accessible via TCP.
+
+Available for linux/amd64 and linux/arm64 architecture.
 
 ## Example usage:
 
@@ -9,53 +11,54 @@ Sample `docker-compose.yml`:
 ```yaml
 version: '2'
 services:
-  the_database:
-    image: ubuntu:14.04
-    command: >
-      /bin/bash -c "
-        sleep 5;
-        nc -lk 0.0.0.0 5432;
-      "
-  another_service:
-    image: ubuntu:14.04
-    command: >
-      /bin/bash -c "
-        sleep 8;
-        nc -lk 0.0.0.0 5555;
-      "
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    ports:
+      - 27017:27017
+    networks:
+      - my-network
 
-  the_web_server:
-    image: ubuntu:14.04
-    depends_on:
-      - the_database
-      - another_service
-    command: >
-      /bin/bash -c "
-        nc -z the_database 5432 &&
-        echo Connected to DB and started!
-      "
+  redis:
+    container_name: redis
+    image: redis:6
+    ports:
+      - 6379:6379
+    networks:
+      - my-network
+
+  server:
+    container_name: server
+    image: server
+    ports:
+      - 3000:3000
+    networks:
+      - my-network
 
   start_dependencies:
-    image: dadarek/wait-for-dependencies
+    image: tehkapa/docker-wait-for-dependencies
     depends_on:
-      - the_database
-      - another_service
-    command: the_database:5432 another_service:5555
+      - mongo
+      - redis
+    container_name: wait-for-dependencies
+    command: mongo:27017 redis:6379
+    networks:
+      - my-network
 ```
 
-Then, to guarantee that `the_database` and `another_service` are ready before running `the_web_server`:
+Then, to guarantee that `mongo` and `redis` are ready before running `server`:
 
 ```bash
 $ docker-compose run --rm start_dependencies
 # Some output from docker compose
-$ docker-compose up the_web_server
+$ docker-compose up server
 ```
 
 By default, there will be a 2 second sleep time between each check. You can modify this by setting the `SLEEP_LENGTH` environment variable:
 
 ```yaml
   start_dependencies:
-    image: dadarek/wait-for-dependencies
+    image: tehkapa/docker-wait-for-dependencies
     environment:
       - SLEEP_LENGTH: 0.5
 ```
@@ -64,7 +67,7 @@ By default, there will be a 300 seconds timeout before cancelling the wait_for. 
 
 ```yaml
   start_dependencies:
-    image: dadarek/wait-for-dependencies
+    image: tehkapa/docker-wait-for-dependencies
     environment:
       - SLEEP_LENGTH: 1
       - TIMEOUT_LENGTH: 60

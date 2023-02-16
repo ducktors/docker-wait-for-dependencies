@@ -1,25 +1,32 @@
-#!/bin/sh
+#!/bin/bash
 
-: ${SLEEP_LENGTH:=2}
-: ${TIMEOUT_LENGTH:=300}
+SLEEP_LENGTH=${SLEEP_LENGTH:-2}
+TIMEOUT_LENGTH=${TIMEOUT_LENGTH:-300}
 
 wait_for() {
-  START=$(date +%s)
-  echo "Waiting for $1 to listen on $2..."
-  while ! nc -z $1 $2;
-    do
-    if [ $(($(date +%s) - $START)) -gt $TIMEOUT_LENGTH ]; then
-        echo "Service $1:$2 did not start within $TIMEOUT_LENGTH seconds. Aborting..."
-        exit 1
+  local host=$1
+  local port=$2
+
+  echo "Waiting for $host to listen on port $port..."
+
+  local start_time=$(date +%s)
+  while ! nc -z "$host" "$port"; do
+    local elapsed_time=$(($(date +%s) - start_time))
+
+    if ((elapsed_time > TIMEOUT_LENGTH)); then
+      echo "Service $host:$port did not start within $TIMEOUT_LENGTH seconds. Aborting..."
+      exit 1
     fi
-    echo "sleeping"
-    sleep $SLEEP_LENGTH
+
+    echo "Sleeping for $SLEEP_LENGTH seconds..."
+    sleep "$SLEEP_LENGTH"
   done
+
+  echo "$host is listening on port $port"
 }
 
-for var in "$@"
-do
-  host=${var%:*}
-  port=${var#*:}
-  wait_for $host $port
+for arg in "$@"; do
+  host=${arg%:*}
+  port=${arg#*:}
+  wait_for "$host" "$port"
 done
