@@ -1,8 +1,10 @@
 # Docker Wait for Deps
 
+![License](https://img.shields.io/github/license/matteovivona/docker-wait-for-dependencies) [![Docker Pulls](https://img.shields.io/docker/pulls/tehkapa/docker-wait-for-dependencies?logo=docker)](https://hub.docker.com/r/tehkapa/docker-wait-for-dependencies) ![amd64](https://img.shields.io/badge/arch-linux%2Famd64-brightgreen) ![amd64](https://img.shields.io/badge/arch-linux%2Farm64-brightgreen)
+
 A simple container that puts itself on hold until the other services declared in the docker-compose are accessible via TCP.
 
-Available for linux/amd64 and linux/arm64 architecture.
+Available for `linux/amd64` and `linux/arm64` architectures.
 
 ## Example usage:
 
