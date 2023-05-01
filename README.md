@@ -1,6 +1,6 @@
-# Docker Wait for Deps
+# Docker Wait for Dependencies
 
-![License](https://img.shields.io/github/license/matteovivona/docker-wait-for-dependencies) [![Docker Pulls](https://img.shields.io/docker/pulls/ducktors/docker-wait-for-dependencies?logo=docker)](https://hub.docker.com/r/ducktors/docker-wait-for-dependencies) ![amd64](https://img.shields.io/badge/arch-linux%2Famd64-brightgreen) ![amd64](https://img.shields.io/badge/arch-linux%2Farm64-brightgreen)
+![License](https://img.shields.io/github/license/matteovivona/docker-wait-for-dependencies) [![Docker Pulls](https://img.shields.io/docker/pulls/drevops/docker-wait-for-dependencies?logo=docker)](https://hub.docker.com/r/drevops/docker-wait-for-dependencies) ![amd64](https://img.shields.io/badge/arch-linux%2Famd64-brightgreen) ![amd64](https://img.shields.io/badge/arch-linux%2Farm64-brightgreen)
 
 A simple container that puts itself on hold until the other services declared in the docker-compose are accessible via TCP.
 
@@ -38,7 +38,7 @@ services:
       - my-network
 
   start_dependencies:
-    image: tehkapa/docker-wait-for-dependencies
+    image: drevops/docker-wait-for-dependencies
     depends_on:
       - mongo
       - redis
@@ -60,7 +60,7 @@ By default, there will be a 2 second sleep time between each check. You can modi
 
 ```yaml
   start_dependencies:
-    image: tehkapa/docker-wait-for-dependencies
+    image: drevops/docker-wait-for-dependencies
     environment:
       - SLEEP_LENGTH: 0.5
 ```
@@ -69,7 +69,7 @@ By default, there will be a 300 seconds timeout before cancelling the wait_for. 
 
 ```yaml
   start_dependencies:
-    image: tehkapa/docker-wait-for-dependencies
+    image: drevops/docker-wait-for-dependencies
     environment:
       - SLEEP_LENGTH: 1
       - TIMEOUT_LENGTH: 60

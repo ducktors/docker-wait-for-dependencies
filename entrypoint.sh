@@ -6,10 +6,11 @@ TIMEOUT_LENGTH=${TIMEOUT_LENGTH:-300}
 wait_for() {
   local host=$1
   local port=$2
+  local start_time
 
   echo "Waiting for $host to listen on port $port..."
 
-  local start_time=$(date +%s)
+  start_time=$(date +%s)
   while ! nc -z "$host" "$port"; do
     local elapsed_time=$(($(date +%s) - start_time))
 
