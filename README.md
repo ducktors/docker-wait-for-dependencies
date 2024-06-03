@@ -38,7 +38,7 @@ services:
       - my-network
 
   start_dependencies:
-    image: tehkapa/docker-wait-for-dependencies
+    image: ducktors/docker-wait-for-dependencies
     depends_on:
       - mongo
       - redis
@@ -60,7 +60,7 @@ By default, there will be a 2 second sleep time between each check. You can modi
 
 ```yaml
   start_dependencies:
-    image: tehkapa/docker-wait-for-dependencies
+    image: ducktors/docker-wait-for-dependencies
     environment:
       - SLEEP_LENGTH: 0.5
 ```
@@ -69,7 +69,7 @@ By default, there will be a 300 seconds timeout before cancelling the wait_for. 
 
 ```yaml
   start_dependencies:
-    image: tehkapa/docker-wait-for-dependencies
+    image: ducktors/docker-wait-for-dependencies
     environment:
       - SLEEP_LENGTH: 1
       - TIMEOUT_LENGTH: 60
